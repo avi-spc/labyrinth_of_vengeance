@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "LabyrinthOfVengeance.sln"
+    "dotnet.defaultSolution": "labyrinth_of_vengeance.sln"
 }
