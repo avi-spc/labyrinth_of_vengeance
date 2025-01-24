@@ -3,7 +3,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] float moveSpeed = 5f;
+    [SerializeField] float moveForwardSpeed = 4f;
+    [SerializeField] float moveBackwardSpeed = 1.5f;
     [SerializeField] float rotationSpeed = 360f;
 
     CharacterController characterController;
@@ -20,7 +21,7 @@ public class PlayerController : MonoBehaviour
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
 
-        float moveAmount = Mathf.Clamp01(Mathf.Abs(v));
+        float moveAmount = Mathf.Clamp(v, -1, 1);
 
         Vector3 moveInput = new Vector3(0, 0, v).normalized;
 
@@ -28,6 +29,8 @@ public class PlayerController : MonoBehaviour
         {
             LookTowards(h);
         }
+
+        float moveSpeed = v < 0 ? moveBackwardSpeed : moveForwardSpeed;
 
         characterController.Move(transform.rotation * moveInput * moveSpeed * Time.deltaTime);
         animator.SetFloat("moveAmount", moveAmount, 0.1f, Time.deltaTime);

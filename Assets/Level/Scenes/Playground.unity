@@ -326,7 +326,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e44e12cefa4cdcc44b8ba98563b06fe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveForwardSpeed: 4
+  moveBackwardSpeed: 1.5
   rotationSpeed: 360
 --- !u!143 &340216024
 CharacterController:
