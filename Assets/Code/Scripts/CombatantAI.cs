@@ -1,13 +1,16 @@
+using System.Collections;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class CombatantAI : MonoBehaviour
 {
     [SerializeField] float fieldOfView;
     [SerializeField] float viewDistance;
     [SerializeField] LayerMask obstacleLayerMask;
+    [SerializeField] LayerMask platformLayerMask;
 
     [SerializeField] float moveSpeed;
 
@@ -15,8 +18,7 @@ public class CombatantAI : MonoBehaviour
     CharacterController characterController;
 
     RaycastHit hitInfo;
-    float patrolOffset = 5f;
-    bool changingDirection;
+    float patrolOffset = 1f;
 
     private void Awake()
     {
@@ -26,12 +28,42 @@ public class CombatantAI : MonoBehaviour
     private void FixedUpdate()
     {
         // DetectPlayer();
+        Patrol();
     }
 
     private void Update()
     {
-        Patrol();
     }
+
+    private void Patrol()
+    {
+        Debug.DrawRay(transform.position + transform.up, -transform.right * patrolOffset, Color.black);
+        Debug.DrawRay(transform.position + transform.up, Quaternion.Euler(0, 45, 0) * -transform.right * patrolOffset * 2, Color.black);
+        Debug.DrawRay(transform.position + transform.up - transform.forward / 2, -transform.right * patrolOffset, Color.black);
+        Debug.DrawRay(transform.position + transform.up - transform.right, -transform.up * patrolOffset * 4, Color.black);
+
+
+        Debug.DrawRay(transform.position + transform.forward / 2 + transform.up, -transform.up * patrolOffset * 4, Color.black);
+        Debug.DrawRay(transform.position + transform.up, transform.forward * patrolOffset, Color.black);
+
+        bool obstacleFront = Physics.Raycast(transform.position + transform.up, transform.forward, patrolOffset, obstacleLayerMask);
+        bool hasGround = Physics.Raycast(transform.position + transform.forward / 2 + transform.up, -transform.up, patrolOffset * 4, platformLayerMask);
+        bool noLeftObstacle = !Physics.Raycast(transform.position + transform.up, -transform.right, patrolOffset, obstacleLayerMask) && !Physics.Raycast(transform.position + transform.up, Quaternion.Euler(0, 45, 0) * -transform.right, patrolOffset * 2, obstacleLayerMask) && !Physics.Raycast(transform.position + transform.up - transform.forward / 2, -transform.right, patrolOffset, obstacleLayerMask) && Physics.Raycast(transform.position - transform.right + transform.up, -transform.up, patrolOffset * 4, platformLayerMask);
+
+        if (noLeftObstacle)
+        {
+            transform.rotation *= Quaternion.Euler(0, -90, 0);
+        }
+        else if (hasGround && !obstacleFront)
+        {
+            Move();
+        }
+        else
+        {
+            transform.rotation *= Quaternion.Euler(0, 90, 0);
+        }
+    }
+
 
     private void DetectPlayer()
     {
@@ -55,34 +87,6 @@ public class CombatantAI : MonoBehaviour
         else
         {
             Debug.Log("Out of sight");
-        }
-    }
-
-    private void Patrol()
-    {
-        Debug.DrawRay(transform.position + transform.forward + transform.up, -transform.up * patrolOffset, Color.black);
-        Debug.DrawRay(transform.position + transform.right + transform.up, transform.right * patrolOffset, Color.black);
-        Debug.DrawRay(transform.position - transform.right + transform.up, -transform.right * patrolOffset, Color.black);
-
-        if (!Physics.Raycast(transform.position + transform.forward + transform.up, -transform.up, patrolOffset, obstacleLayerMask))
-        {
-            if (!Physics.Raycast(transform.position + transform.right + transform.up, transform.right, patrolOffset, obstacleLayerMask) && !changingDirection)
-            {
-                changingDirection = true;
-                transform.rotation *= Quaternion.Euler(0, 90, 0);
-            }
-            else if (!Physics.Raycast(transform.position - transform.right + transform.up, -transform.right, patrolOffset, obstacleLayerMask) && !changingDirection)
-            {
-                changingDirection = true;
-                transform.rotation *= Quaternion.Euler(0, -90, 0);
-            }
-
-        }
-        else
-        {
-            changingDirection = false;
-            Move();
-            Debug.Log(transform.forward);
         }
     }
 
