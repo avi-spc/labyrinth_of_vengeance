@@ -16,6 +16,7 @@ public class CombatantAI : MonoBehaviour
     [SerializeField] LayerMask innerObstacleLayerMask;
 
     [SerializeField] float moveSpeed;
+    float suspicionMoveSpeed = 0.4f;
 
     [Range(0, 1)]
     [SerializeField] float suspicionLevel;
@@ -30,11 +31,11 @@ public class CombatantAI : MonoBehaviour
     RaycastHit hitInfo;
     float patrolOffset = 1f;
 
-    public enum State { Patrol, RangedToPatrol, Suspicion, Meele, Ranged };
+    public enum State { Patrol, Melee, RangedToPatrol, Suspicion, Ranged };
     public State currentState;
 
     public List<Vector3> patrolPathway;
-    public Vector3 returnPatrolPos;
+    public Vector3 returnToPatrolPosition;
 
     private void Awake()
     {
@@ -48,30 +49,45 @@ public class CombatantAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        DetectPlayer();
+        if (Vector3.Distance(transform.position, protagonist.transform.position) < .75f)
+        {
+            currentState = State.Melee;
+        }
+        else
+        {
+            DetectPlayer();
+        }
 
         switch (currentState)
         {
             case State.Patrol:
-                agent.isStopped = true;
                 Patrol();
                 break;
             case State.Suspicion:
+                animator.SetBool("isMelee", false);
+                agent.speed = suspicionMoveSpeed;
                 agent.isStopped = false;
                 agent.SetDestination(protagonist.position);
                 break;
             case State.Ranged:
                 agent.isStopped = true;
+                animator.SetBool("isMelee", false);
+                transform.LookAt(protagonist.position, Vector3.up);
                 break;
             case State.RangedToPatrol:
-                agent.SetDestination(returnPatrolPos);
-                Debug.Log(agent.velocity.magnitude);
-                if (transform.position == returnPatrolPos)
+                agent.speed = moveSpeed;
+                agent.SetDestination(returnToPatrolPosition);
+                if (agent.velocity.magnitude <= 0)
                 {
                     agent.isStopped = true;
                     transform.rotation = Quaternion.Euler(0, 90, 0);
                     currentState = State.Patrol;
                 }
+                break;
+            case State.Melee:
+                transform.LookAt(protagonist.position, Vector3.up);
+                agent.SetDestination(transform.position);
+                animator.SetBool("isMelee", true);
                 break;
         }
     }
@@ -124,6 +140,10 @@ public class CombatantAI : MonoBehaviour
 
         if (Vector3.Distance(transform.position, protagonist.transform.position) <= viewDistance && IsPlayerInViewRadius)
         {
+            if (suspicionLevel >= 1 && currentState == State.Melee)
+            {
+                currentState = State.Ranged;
+            }
 
             if (!Physics.Raycast(transform.position, protagonist.transform.position - transform.position, out hitInfo, (protagonist.transform.position - transform.position).magnitude, innerObstacleLayerMask))
             {
@@ -131,12 +151,9 @@ public class CombatantAI : MonoBehaviour
                 {
                     StartCoroutine(IncreaseSuspicion());
                 }
-
-                // Debug.Log("Detected");
             }
             else
             {
-                // Debug.Log("Behind covers");
                 if (isAlreadySuspecting)
                 {
                     StartCoroutine(DecreaseSuspicion());
@@ -149,7 +166,6 @@ public class CombatantAI : MonoBehaviour
             {
                 StartCoroutine(DecreaseSuspicion());
             }
-            // Debug.Log("Out of sight");
         }
     }
 
@@ -160,8 +176,9 @@ public class CombatantAI : MonoBehaviour
 
     IEnumerator IncreaseSuspicion()
     {
+        suspectedDistance = Mathf.Clamp((protagonist.transform.position - transform.position).magnitude, 2, 5);
+
         isAlreadySuspecting = true;
-        suspectedDistance = (protagonist.transform.position - transform.position).magnitude;
         currentState = State.Suspicion;
 
         while (suspicionLevel < 1)
@@ -197,18 +214,24 @@ public class CombatantAI : MonoBehaviour
 
         if (suspicionLevel <= 0)
         {
-            returnPatrolPos = patrolPathway[patrolPathway.Count - 1];
-            foreach (Vector3 waypoint in patrolPathway)
-            {
-                if (Vector3.Distance(waypoint, transform.position) < Vector3.Distance(returnPatrolPos, transform.position))
-                {
-                    returnPatrolPos = waypoint;
-                }
-            }
-
-            agent.speed = 1;
+            returnToPatrolPosition = FindClosestPatrolPoint();
             currentState = State.RangedToPatrol;
         }
+    }
+
+    private Vector3 FindClosestPatrolPoint()
+    {
+        Vector3 patrolPosition = patrolPathway[patrolPathway.Count - 1];
+
+        foreach (Vector3 waypoint in patrolPathway)
+        {
+            if (Vector3.Distance(waypoint, transform.position) < Vector3.Distance(patrolPosition, transform.position))
+            {
+                patrolPosition = waypoint;
+            }
+        }
+
+        return patrolPosition;
     }
 
     bool IsPlayerInViewRadius => Vector3.Angle(transform.forward, (protagonist.transform.position - transform.position).normalized) < fieldOfView / 2;
