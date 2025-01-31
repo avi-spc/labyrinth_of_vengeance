@@ -132,7 +132,8 @@ GameObject:
   - component: {fileID: 100323867}
   - component: {fileID: 100323870}
   - component: {fileID: 100323866}
-  m_Layer: 0
+  - component: {fileID: 100323871}
+  m_Layer: 9
   m_Name: Combtant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,8 +170,7 @@ MonoBehaviour:
   protagonist: {fileID: 648824466}
   currentState: 0
   patrolPathway: []
-  returnPatrolPos: {x: 0, y: 0, z: 0}
-  IsMeleeAvailable: 0
+  returnToPatrolPosition: {x: 0, y: 0, z: 0}
 --- !u!95 &100323867
 Animator:
   serializedVersion: 7
@@ -256,6 +256,35 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &100323871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100323865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a17a9fe9001054ea350c4bcc4d9965, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  combatantUnit: {fileID: 11400000, guid: 9e5a3c88296fa114f81410b66cde479f, type: 2}
+  healthPoints: 0
+  onDamageReceived:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 100323871}
+        m_TargetAssemblyTypeName: CombatantController, Assembly-CSharp
+        m_MethodName: ChangeState
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &227377776
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,6 +669,7 @@ GameObject:
   - component: {fileID: 648824465}
   - component: {fileID: 648824464}
   - component: {fileID: 648824463}
+  - component: {fileID: 648824467}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -718,13 +748,29 @@ Transform:
   m_GameObject: {fileID: 648824462}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.72, y: 2.51, z: -2.19}
+  m_LocalPosition: {x: 4.75, y: 2.51, z: -1.71}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 279312487}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &648824467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 648824462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 477b139bee32beb4594d5e5f6db1ef1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equippedArtillery: {fileID: 11400000, guid: 64882f2e1ba6bdc4982a26a0a5543479, type: 2}
+  combatantLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &649990192
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,16 +1,22 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CombatantController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] CombatantUnitSO combatantUnit;
+    [SerializeField] int healthPoints;
+
+    public UnityEvent onDamageReceived;
+
+    private void Awake()
     {
-        
+        healthPoints = combatantUnit.maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TakeDamage(int damage)
     {
-        
+        healthPoints -= damage;
+
+        onDamageReceived.Invoke();
     }
 }
