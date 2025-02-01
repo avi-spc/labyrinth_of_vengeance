@@ -16,10 +16,10 @@ public class CombatantAI : MonoBehaviour
     [SerializeField] LayerMask innerObstacleLayerMask;
 
     [SerializeField] float moveSpeed;
-    float suspicionMoveSpeed = 0.4f;
+    float suspicionMoveSpeed = 0.55f;
 
     [Range(0, 1)]
-    [SerializeField] float suspicionLevel;
+    [SerializeField] public float suspicionLevel;
     public bool isAlreadySuspecting;
     public float suspectedDistance;
 
@@ -162,9 +162,13 @@ public class CombatantAI : MonoBehaviour
         }
         else
         {
-            if (isAlreadySuspecting)
+            if (Physics.Raycast(transform.position, protagonist.transform.position - transform.position, out hitInfo, (protagonist.transform.position - transform.position).magnitude, innerObstacleLayerMask) && currentState == State.Ranged)
             {
                 StartCoroutine(DecreaseSuspicion());
+            }
+            else if (!Physics.Raycast(transform.position, protagonist.transform.position - transform.position, out hitInfo, (protagonist.transform.position - transform.position).magnitude, innerObstacleLayerMask) && currentState == State.Suspicion)
+            {
+                StartCoroutine(IncreaseSuspicion());
             }
         }
     }
@@ -204,7 +208,7 @@ public class CombatantAI : MonoBehaviour
 
         while (suspicionLevel > 0)
         {
-            suspicionLevel -= suspectedDistance / 100;
+            suspicionLevel -= suspectedDistance / 500;
             animator.SetFloat("suspicionLevel", suspicionLevel);
             yield return new WaitForSeconds(0.1f);
 
@@ -214,6 +218,7 @@ public class CombatantAI : MonoBehaviour
 
         if (suspicionLevel <= 0)
         {
+            animator.ResetTrigger("GotHit");
             returnToPatrolPosition = FindClosestPatrolPoint();
             currentState = State.RangedToPatrol;
         }

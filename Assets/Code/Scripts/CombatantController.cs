@@ -8,9 +8,14 @@ public class CombatantController : MonoBehaviour
 
     public UnityEvent onDamageReceived;
 
+    CombatantAI combatantAI;
+    Animator animator;
+
     private void Awake()
     {
         healthPoints = combatantUnit.maxHealth;
+        combatantAI = GetComponent<CombatantAI>();
+        animator = GetComponent<Animator>();
     }
 
     public void TakeDamage(int damage)
@@ -18,5 +23,18 @@ public class CombatantController : MonoBehaviour
         healthPoints -= damage;
 
         onDamageReceived.Invoke();
+    }
+
+    public void ChangeState()
+    {
+        if (combatantAI.currentState != CombatantAI.State.Ranged)
+        {
+            combatantAI.currentState = CombatantAI.State.Ranged;
+            combatantAI.suspicionLevel = 1.01f;
+            combatantAI.isAlreadySuspecting = true;
+            combatantAI.suspectedDistance = Vector3.Distance(transform.position, combatantAI.protagonist.position);
+        }
+
+        animator.SetTrigger("GotHit");
     }
 }

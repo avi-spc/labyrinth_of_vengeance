@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9b225602e847944cb1bfe2c397fce1d, type: 3}
   m_Name: Rifle
   m_EditorClassIdentifier: 
-  fireRate: 1
-  fireRange: 5
+  fireRate: 0.1
+  fireRange: 10
   reloadTime: 2
   damageValue: 10
