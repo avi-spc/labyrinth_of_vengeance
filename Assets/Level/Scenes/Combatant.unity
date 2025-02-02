@@ -163,6 +163,9 @@ MonoBehaviour:
   innerObstacleLayerMask:
     serializedVersion: 2
     m_Bits: 320
+  protagonistLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
   moveSpeed: 1
   suspicionLevel: 0
   isAlreadySuspecting: 0
@@ -670,7 +673,7 @@ GameObject:
   - component: {fileID: 648824464}
   - component: {fileID: 648824463}
   - component: {fileID: 648824467}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -692,6 +695,7 @@ MonoBehaviour:
   moveForwardSpeed: 4
   moveBackwardSpeed: 1.5
   rotationSpeed: 360
+  health: 100
 --- !u!95 &648824464
 Animator:
   serializedVersion: 7

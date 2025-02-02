@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Level_0
   m_EditorClassIdentifier: 
   maxHealth: 100
-  damageValue: 20
+  damageValue: 5
+  fireRate: 1

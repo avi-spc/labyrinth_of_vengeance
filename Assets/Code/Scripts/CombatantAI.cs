@@ -14,6 +14,7 @@ public class CombatantAI : MonoBehaviour
     [SerializeField] LayerMask obstacleLayerMask;
     [SerializeField] LayerMask platformLayerMask;
     [SerializeField] LayerMask innerObstacleLayerMask;
+    public LayerMask protagonistLayerMask;
 
     [SerializeField] float moveSpeed;
     float suspicionMoveSpeed = 0.55f;
@@ -25,6 +26,7 @@ public class CombatantAI : MonoBehaviour
 
     public Transform protagonist;
     CharacterController characterController;
+    CombatantController combatantController;
     Animator animator;
     NavMeshAgent agent;
 
@@ -40,6 +42,7 @@ public class CombatantAI : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+        combatantController = GetComponent<CombatantController>();
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         patrolPathway = new List<Vector3>();

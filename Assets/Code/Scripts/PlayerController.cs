@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     CharacterController characterController;
     Animator animator;
 
+    public float health = 100f;
+
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
