@@ -8,7 +8,6 @@ public class ArtilleryController : MonoBehaviour
     [SerializeField] LayerMask combatantLayerMask;
 
     RaycastHit hitInfo;
-    float previousFireTimestamp;
 
     Animator animator;
 
@@ -19,23 +18,20 @@ public class ArtilleryController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButton("Fire1") && CanShoot)
+        if (Input.GetButton("Fire1"))
         {
-            Shoot();
+            animator.SetBool("IsFiring", true);
         }
 
         if (Input.GetButtonUp("Fire1"))
         {
-            animator.SetLayerWeight(1, 0);
+            animator.SetBool("IsFiring", false);
         }
     }
 
     void Shoot()
     {
-        previousFireTimestamp = Time.time;
-
         Debug.DrawRay(transform.position + transform.up, transform.forward * equippedArtillery.fireRange, Color.red);
-        animator.SetLayerWeight(1, 1);
 
         if (Physics.Raycast(transform.position + transform.up, transform.forward, out hitInfo, equippedArtillery.fireRange, combatantLayerMask))
         {
@@ -50,8 +46,5 @@ public class ArtilleryController : MonoBehaviour
             // }
         }
 
-
     }
-
-    bool CanShoot => Time.time - previousFireTimestamp > equippedArtillery.fireRate;
 }

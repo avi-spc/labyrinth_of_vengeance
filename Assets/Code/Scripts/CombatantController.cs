@@ -40,13 +40,11 @@ public class CombatantController : MonoBehaviour
 
     public void Shoot()
     {
-            Debug.DrawRay(transform.position + transform.up, transform.forward * 10, Color.black);
+        Debug.DrawRay(transform.position + transform.up, transform.forward * 10, Color.black);
 
-            if (Physics.Raycast(transform.position + transform.up, transform.forward, out RaycastHit hitInfo, 10f, combatantAI.protagonistLayerMask))
-            {
-                hitInfo.transform.GetComponent<PlayerController>().health -= combatantUnit.damageValue;
-            }
+        if (Physics.Raycast(transform.position + transform.up, transform.forward, out RaycastHit hitInfo, 10f, combatantAI.protagonistLayerMask))
+        {
+            hitInfo.transform.GetComponent<PlayerController>().health -= combatantUnit.damageValue;
+        }
     }
-
-
 }
