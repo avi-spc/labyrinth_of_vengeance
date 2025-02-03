@@ -550,7 +550,6 @@ MonoBehaviour:
   combatantLayerMask:
     serializedVersion: 2
     m_Bits: 512
-  grenade: {fileID: 0}
 --- !u!114 &340216028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -560,15 +559,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 340216022}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f3ee4b361d99ef46847d01c4be0a1ad, type: 3}
+  m_Script: {fileID: 11500000, guid: 5630f1eef20ce8641bb007b9bba79d7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newPosition: {x: 0, y: 0, z: 0}
-  positionSegments: []
-  grenade: {fileID: 2081081770}
-  followingPath: 0
-  timeParam: 0
   lineRenderer: {fileID: 125462745}
+  lineRendererSegments: []
 --- !u!1 &1347227870
 GameObject:
   m_ObjectHideFlags: 0
