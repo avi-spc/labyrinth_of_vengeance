@@ -4,7 +4,7 @@ using UnityEngine.Events;
 public class CombatantController : MonoBehaviour
 {
     [SerializeField] CombatantUnitSO combatantUnit;
-    [SerializeField] int healthPoints;
+    [SerializeField] int health;
 
     public UnityEvent onDamageReceived;
 
@@ -13,14 +13,14 @@ public class CombatantController : MonoBehaviour
 
     private void Awake()
     {
-        healthPoints = combatantUnit.maxHealth;
+        health = combatantUnit.maxHealth;
         combatantAI = GetComponent<CombatantAI>();
         animator = GetComponent<Animator>();
     }
 
     public void TakeDamage(int damage)
     {
-        healthPoints -= damage;
+        health -= damage;
 
         onDamageReceived.Invoke();
     }
@@ -36,6 +36,7 @@ public class CombatantController : MonoBehaviour
         }
 
         animator.SetTrigger("GotHit");
+        HandleDeath();
     }
 
     public void Shoot()
@@ -45,6 +46,26 @@ public class CombatantController : MonoBehaviour
         if (Physics.Raycast(transform.position + transform.up, transform.forward, out RaycastHit hitInfo, 10f, combatantAI.protagonistLayerMask))
         {
             hitInfo.transform.GetComponent<PlayerController>().health -= combatantUnit.damageValue;
+        }
+    }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.CompareTag("Grenade"))
+        {
+            health -= 100;
+        }
+
+        HandleDeath();
+    }
+
+    private void HandleDeath()
+    {
+        if (health <= 0)
+        {
+            GetComponent<CombatantAI>().enabled = false;
+            GetComponent<Collider>().enabled = false;
+            animator.SetTrigger("Die");
         }
     }
 }
