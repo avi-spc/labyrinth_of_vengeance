@@ -19,18 +19,18 @@ public class ThrowablesController : MonoBehaviour
     {
         // if (Mathf.Abs(Input.GetAxis("Mouse X")) > 0.01f || Mathf.Abs(Input.GetAxis("Mouse Y")) > 0.01f)
         // {
-            // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            // if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
-            // {
-            //     lineRendererSegments = BezierTrajectory.CalculateProjectileTrajectory(transform.position + transform.up, controlVertex.position, hit.point);
-            //     lineRenderer.SetPositions(lineRendererSegments.ToArray());
-            // }
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+            {
+                lineRendererSegments = BezierTrajectory.CalculateProjectileTrajectory(transform.position + transform.up, controlVertex.position, hit.point);
+                lineRenderer.SetPositions(lineRendererSegments.ToArray());
+            }
         // }
 
         if (Input.GetButtonDown("Fire1"))
         {
-            // StartCoroutine(ReleaseThrowable(lineRendererSegments));
+            StartCoroutine(ReleaseThrowable(lineRendererSegments));
         }
     }
 

@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,12 +32,14 @@ public class CombatantController : MonoBehaviour
         {
             combatantAI.currentState = CombatantAI.State.Ranged;
             combatantAI.suspicionLevel = 1.01f;
+            animator.SetFloat("suspicionLevel", combatantAI.suspicionLevel);
             combatantAI.isAlreadySuspecting = true;
             combatantAI.suspectedDistance = Vector3.Distance(transform.position, combatantAI.protagonist.position);
         }
 
         animator.SetTrigger("GotHit");
-        HandleDeath();
+
+        HandleRangedDeath();
     }
 
     public void Shoot()
@@ -54,18 +57,30 @@ public class CombatantController : MonoBehaviour
         if (collider.CompareTag("Grenade"))
         {
             health -= 100;
+            HandleRangedDeath();
         }
 
-        HandleDeath();
     }
 
-    private void HandleDeath()
+    public void HandleRangedDeath()
     {
         if (health <= 0)
         {
-            GetComponent<CombatantAI>().enabled = false;
-            GetComponent<Collider>().enabled = false;
             animator.SetTrigger("Die");
+            HandleDeathComponents();
         }
+    }
+
+    public void HandleStealthDeath()
+    {
+        health = -100;
+        HandleDeathComponents();
+        animator.SetTrigger("StealthDeath");
+    }
+
+    private void HandleDeathComponents()
+    {
+        GetComponent<CombatantAI>().enabled = false;
+        GetComponent<Collider>().enabled = false;
     }
 }

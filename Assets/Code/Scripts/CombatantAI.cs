@@ -211,7 +211,7 @@ public class CombatantAI : MonoBehaviour
 
         while (suspicionLevel > 0)
         {
-            suspicionLevel -= suspectedDistance / 500;
+            suspicionLevel -= suspectedDistance / 300;
             animator.SetFloat("suspicionLevel", suspicionLevel);
             yield return new WaitForSeconds(0.1f);
 
