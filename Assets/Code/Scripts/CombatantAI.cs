@@ -139,7 +139,7 @@ public class CombatantAI : MonoBehaviour
         Debug.DrawRay(transform.position, Quaternion.Euler(0, fieldOfView / 2, 0) * transform.forward * viewDistance, Color.blue);
         Debug.DrawRay(transform.position, transform.forward * viewDistance, Color.blue);
         Debug.DrawRay(transform.position, Quaternion.Euler(0, -fieldOfView / 2, 0) * transform.forward * viewDistance, Color.blue);
-        Debug.DrawRay(transform.position, protagonist.transform.position - transform.position, Color.red);
+        Debug.DrawRay(transform.position + transform.up * 1.2f, protagonist.GetChild(2).position - transform.position, Color.red);
 
         if (Vector3.Distance(transform.position, protagonist.transform.position) <= viewDistance && IsPlayerInViewRadius)
         {
@@ -148,7 +148,7 @@ public class CombatantAI : MonoBehaviour
                 currentState = State.Ranged;
             }
 
-            if (!Physics.Raycast(transform.position, protagonist.transform.position - transform.position, out hitInfo, (protagonist.transform.position - transform.position).magnitude, innerObstacleLayerMask))
+            if (!Physics.Raycast(transform.position+ transform.up * 1.2f, protagonist.GetChild(2).position - transform.position, out hitInfo, (protagonist.transform.position - transform.position).magnitude, innerObstacleLayerMask))
             {
                 if (!isAlreadySuspecting)
                 {

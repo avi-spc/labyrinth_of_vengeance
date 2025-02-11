@@ -14,11 +14,13 @@ public class PlayerController : MonoBehaviour
 
     public bool isStealthAvailable;
     public Transform stealthTarget;
+    Transform detectorPosition;
 
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        detectorPosition = transform.GetChild(2);
     }
 
     void Update()
@@ -50,6 +52,9 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("IsCrouched", true);
             moveForwardSpeed = 1f;
             moveBackwardSpeed = .5f;
+            characterController.height = 0.85f;
+            characterController.center = new Vector3(0, 0.4f, 0);
+            detectorPosition.localPosition += Vector3.down;
         }
 
         if (Input.GetKeyUp(KeyCode.LeftControl))
@@ -57,6 +62,10 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("IsCrouched", false);
             moveForwardSpeed = 3f;
             moveBackwardSpeed = 1f;
+            characterController.height = 1.7f;
+            characterController.center = new Vector3(0, 0.85f, 0);
+            detectorPosition.localPosition += Vector3.up;
+
         }
     }
 
