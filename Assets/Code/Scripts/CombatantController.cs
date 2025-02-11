@@ -48,7 +48,7 @@ public class CombatantController : MonoBehaviour
 
         if (Physics.Raycast(transform.position + transform.up, transform.forward, out RaycastHit hitInfo, 10f, combatantAI.protagonistLayerMask))
         {
-            hitInfo.transform.GetComponent<PlayerController>().health -= combatantUnit.damageValue;
+            hitInfo.transform.GetComponent<PlayerController>().TakeDamage(combatantUnit.damageValue);
         }
     }
 

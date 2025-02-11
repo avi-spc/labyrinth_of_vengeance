@@ -101,4 +101,10 @@ public class PlayerController : MonoBehaviour
             stealthTarget = null;
         }
     }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        animator.SetTrigger("GotHit");
+    }
 }

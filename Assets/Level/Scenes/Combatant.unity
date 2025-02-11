@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0eb253997d8c85489a57a8d1db43777, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fieldOfView: 120
+  fieldOfView: 90
   viewDistance: 5
   obstacleLayerMask:
     serializedVersion: 2
@@ -1659,7 +1659,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.25
   m_Center: {x: 0, y: 1, z: 0.75}
