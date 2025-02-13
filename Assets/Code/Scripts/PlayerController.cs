@@ -25,47 +25,50 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-
-        float moveAmount = Mathf.Clamp(v, -1, 1);
-
-        Vector3 moveInput = new Vector3(0, 0, v).normalized;
-
-        if (h != 0)
+        if (!transform.GetComponent<PlayerInteractableController>().IsOperatingInteractable)
         {
-            LookTowards(h);
-        }
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
 
-        float moveSpeed = v < 0 ? moveBackwardSpeed : moveForwardSpeed;
+            float moveAmount = Mathf.Clamp(v, -1, 1);
 
-        characterController.Move(transform.rotation * moveInput * moveSpeed * Time.deltaTime);
-        animator.SetFloat("moveAmount", moveAmount, 0.1f, Time.deltaTime);
+            Vector3 moveInput = new Vector3(0, 0, v).normalized;
 
-        if (Input.GetKey(KeyCode.F) && stealthTarget.GetComponent<CombatantAI>().currentState == CombatantAI.State.Patrol && animator.GetBool("IsCrouched"))
-        {
-            StealthAttack();
-        }
+            if (h != 0)
+            {
+                LookTowards(h);
+            }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            animator.SetBool("IsCrouched", true);
-            moveForwardSpeed = 1f;
-            moveBackwardSpeed = .5f;
-            characterController.height = 0.85f;
-            characterController.center = new Vector3(0, 0.4f, 0);
-            detectorPosition.localPosition += Vector3.down;
-        }
+            float moveSpeed = v < 0 ? moveBackwardSpeed : moveForwardSpeed;
 
-        if (Input.GetKeyUp(KeyCode.LeftControl))
-        {
-            animator.SetBool("IsCrouched", false);
-            moveForwardSpeed = 3f;
-            moveBackwardSpeed = 1f;
-            characterController.height = 1.7f;
-            characterController.center = new Vector3(0, 0.85f, 0);
-            detectorPosition.localPosition += Vector3.up;
+            characterController.Move(transform.rotation * moveInput * moveSpeed * Time.deltaTime);
+            animator.SetFloat("moveAmount", moveAmount, 0.1f, Time.deltaTime);
 
+            if (Input.GetKey(KeyCode.F) && stealthTarget.GetComponent<CombatantAI>().currentState == CombatantAI.State.Patrol && animator.GetBool("IsCrouched"))
+            {
+                StealthAttack();
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                animator.SetBool("IsCrouched", true);
+                moveForwardSpeed = 1f;
+                moveBackwardSpeed = .5f;
+                characterController.height = 0.85f;
+                characterController.center = new Vector3(0, 0.4f, 0);
+                detectorPosition.localPosition += Vector3.down;
+            }
+
+            if (Input.GetKeyUp(KeyCode.LeftControl))
+            {
+                animator.SetBool("IsCrouched", false);
+                moveForwardSpeed = 3f;
+                moveBackwardSpeed = 1f;
+                characterController.height = 1.7f;
+                characterController.center = new Vector3(0, 0.85f, 0);
+                detectorPosition.localPosition += Vector3.up;
+
+            }
         }
     }
 
