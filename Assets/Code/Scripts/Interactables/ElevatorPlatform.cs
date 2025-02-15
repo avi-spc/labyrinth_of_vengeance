@@ -12,6 +12,10 @@ public class ElevatorPlatform : MonoBehaviour
     {
         if (transform.position.y < destinationFloor.position.y && isInside && isPowered)
             transform.position += new Vector3(0, 0.5f, 0) * Time.deltaTime;
+        else if (transform.position.y >= destinationFloor.position.y)
+        {
+            destinationFloor.GetComponent<Animator>().SetTrigger("OpenOnce");
+        }
         else
         {
             isPowered = false;
@@ -21,18 +25,18 @@ public class ElevatorPlatform : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Elevator"))
         {
-            collider.transform.SetParent(transform);
+            collider.transform.parent.SetParent(transform);
             isInside = true;
         }
     }
 
     private void OnTriggerExit(Collider collider)
     {
-        if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Elevator"))
         {
-            collider.transform.SetParent(null);
+            collider.transform.parent.SetParent(null);
             isInside = false;
         }
     }
