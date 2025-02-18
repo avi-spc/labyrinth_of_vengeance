@@ -8,6 +8,13 @@ public class PlayerInteractableController : MonoBehaviour
 
     IInteractable interactable = null;
 
+    public GameObject interactionCanvas;
+
+    void Start()
+    {
+        interactionCanvas.SetActive(false);
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.F) && canInteract && interactable != null)
@@ -24,6 +31,7 @@ public class PlayerInteractableController : MonoBehaviour
             {
                 canInteract = true;
                 interactable = component;
+                interactionCanvas.SetActive(true);
             }
         }
     }
@@ -36,6 +44,7 @@ public class PlayerInteractableController : MonoBehaviour
             {
                 canInteract = false;
                 interactable = null;
+                interactionCanvas.SetActive(false);
             }
         }
     }

@@ -11,7 +11,7 @@ public class ElevatorPlatform : MonoBehaviour
     void FixedUpdate()
     {
         if (transform.position.y < destinationFloor.position.y && isInside && isPowered)
-            transform.position += new Vector3(0, 0.5f, 0) * Time.deltaTime;
+            transform.position += new Vector3(0, 1f, 0) * Time.deltaTime;
         else if (transform.position.y >= destinationFloor.position.y)
         {
             destinationFloor.GetComponent<Animator>().SetTrigger("OpenOnce");
