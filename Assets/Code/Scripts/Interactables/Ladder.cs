@@ -13,14 +13,16 @@ public class Ladder : MonoBehaviour, IInteractable
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void Interact(Transform protagonist)
     {
-        Debug.Log("Hello");
-        protagonist.position = ladderBottom.position;
-        // protagonist.LookAt(ladderBottom.up, Vector3.up);
         protagonist.GetComponent<PlayerInteractableController>().IsOperatingInteractable = true;
+        Debug.Log(transform.TransformPoint(ladderBottom.position));
+        Debug.Log(ladderBottom.position);
+        protagonist.GetComponent<PlayerInteractableController>().fixatingTransform = ladderBottom;
+        protagonist.GetComponent<PlayerInteractableController>().IsFixating = true;
+        // protagonist.position = ladderBottom.position;
     }
 }
