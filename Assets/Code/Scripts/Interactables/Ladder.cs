@@ -3,26 +3,19 @@ using UnityEngine.WSA;
 
 public class Ladder : MonoBehaviour, IInteractable
 {
-    public Transform ladderBottom;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    public Transform climberBottom, climberTop;
 
     public void Interact(Transform protagonist)
     {
         protagonist.GetComponent<PlayerInteractableController>().IsOperatingInteractable = true;
-        Debug.Log(transform.TransformPoint(ladderBottom.position));
-        Debug.Log(ladderBottom.position);
-        protagonist.GetComponent<PlayerInteractableController>().fixatingTransform = ladderBottom;
+        Debug.Log(transform.TransformPoint(climberBottom.position));
+        Debug.Log(climberBottom.position);
+        protagonist.GetComponent<PlayerInteractableController>().fixatingTransform = climberBottom;
+        protagonist.GetComponent<PlayerInteractableController>().destinationTransform = climberTop;
         protagonist.GetComponent<PlayerInteractableController>().IsFixating = true;
+        protagonist.GetComponent<PlayerInteractableController>().CanClimb = true;
+        protagonist.GetComponent<Animator>().SetBool("IsClimbing", true);
+
         // protagonist.position = ladderBottom.position;
     }
 }
