@@ -5,10 +5,13 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Experimental.AI;
 using Random = UnityEngine.Random;
 
 public class CombatantAI : MonoBehaviour
 {
+    public Combatant.Type combatantType;
+
     [SerializeField] float fieldOfView;
     [SerializeField] float viewDistance;
     [SerializeField] LayerMask obstacleLayerMask;
@@ -39,6 +42,11 @@ public class CombatantAI : MonoBehaviour
     public List<Vector3> patrolPathway;
     public Vector3 returnToPatrolPosition;
 
+    public Vector3 defaultPosition;
+
+    public Transform extremeOne, extremeTwo;
+
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -46,6 +54,14 @@ public class CombatantAI : MonoBehaviour
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         patrolPathway = new List<Vector3>();
+
+        if (combatantType == Combatant.Type.PingPong)
+        {
+            transform.position = extremeOne.position;
+            defaultPosition = extremeOne.position;
+        }
+        else if (combatantType == Combatant.Type.Static)
+            defaultPosition = transform.position;
 
         currentState = State.Patrol;
     }
@@ -64,7 +80,10 @@ public class CombatantAI : MonoBehaviour
         switch (currentState)
         {
             case State.Patrol:
-                Patrol();
+                if (combatantType == Combatant.Type.Nomad)
+                    Patrol();
+                else if (combatantType == Combatant.Type.PingPong)
+                    TwoPointPatrol();
                 break;
             case State.Suspicion:
                 animator.SetBool("isMelee", false);
@@ -85,6 +104,8 @@ public class CombatantAI : MonoBehaviour
                     agent.isStopped = true;
                     transform.rotation = Quaternion.Euler(0, 90, 0);
                     currentState = State.Patrol;
+                    if (combatantType == Combatant.Type.Static)
+                        animator.SetTrigger("Patrol");
                 }
                 break;
             case State.Melee:
@@ -148,7 +169,7 @@ public class CombatantAI : MonoBehaviour
                 currentState = State.Ranged;
             }
 
-            if (!Physics.Raycast(transform.position+ transform.up * 1.2f, protagonist.GetChild(2).position - transform.position, out hitInfo, (protagonist.transform.position - transform.position).magnitude, innerObstacleLayerMask))
+            if (!Physics.Raycast(transform.position + transform.up * 1.2f, protagonist.GetChild(2).position - transform.position, out hitInfo, (protagonist.transform.position - transform.position).magnitude, innerObstacleLayerMask))
             {
                 if (!isAlreadySuspecting)
                 {
@@ -222,10 +243,32 @@ public class CombatantAI : MonoBehaviour
         if (suspicionLevel <= 0)
         {
             animator.ResetTrigger("GotHit");
-            returnToPatrolPosition = FindClosestPatrolPoint();
+            if (combatantType == Combatant.Type.Nomad)
+                returnToPatrolPosition = FindClosestPatrolPoint();
+            else
+                returnToPatrolPosition = defaultPosition;
             currentState = State.RangedToPatrol;
         }
     }
+
+    public void SwitchDirection()
+    {
+        transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y + 180, 0);
+    }
+
+    private void TwoPointPatrol()
+    {
+        if (transform.position == extremeTwo.position)
+        {
+            agent.SetDestination(extremeOne.position);
+        }
+        else if (transform.position == extremeOne.position)
+        {
+            agent.isStopped = false;
+            agent.SetDestination(extremeTwo.position);
+        }
+    }
+
 
     private Vector3 FindClosestPatrolPoint()
     {
