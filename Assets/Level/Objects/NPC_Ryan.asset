@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb453b3517a959439aee89014a6c9e1, type: 3}
+  m_Name: NPC_Ryan
+  m_EditorClassIdentifier: 
+  npcName: Ryan
+  npcDialogues:
+  - "Ah, a traveler! You don\u2019t seem like you\u2019re from around here. What
+    brings you to our village?"
+  - Yes, the Rusty Lantern is just down the road. But tell me, have you heard about
+    the strange disappearances lately?
+  - "Villagers have gone missing near the old ruins in the forest. If you\u2019re
+    heading that way, be careful."
+  playerResponses:
+  - "I'm just passing through. Do you know if there\u2019s an inn nearby where I
+    can rest?"
+  - "Disappearing people? No, I haven't. What\u2019s going on?"
+  - Thanks for the warning. Do you know anyone who might have more information?
