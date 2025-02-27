@@ -44,14 +44,12 @@ public class PlayerInteractableController : MonoBehaviour
             transform.GetComponent<CharacterController>().Move(transform.rotation * moveInput * 1 * Time.deltaTime);
             transform.GetComponent<Animator>().SetFloat("climbAmount", climbAmount);
 
-            Debug.Log(transform.position+" | " + fixatingTransform.position+" |");
         }
         else if (CanClimb && transform.position.y > destinationTransform.position.y)
         {
             transform.position = Vector3.MoveTowards(transform.position, destinationTransform.position, 2 * Time.deltaTime);
             transform.GetComponent<Animator>().SetTrigger("ReachedTop");
 
-            Debug.Log(transform.position + "" + destinationTransform.position);
         }
         else if (CanClimb && transform.position == destinationTransform.position)
         {

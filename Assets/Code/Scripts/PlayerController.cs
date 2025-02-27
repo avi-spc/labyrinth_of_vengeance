@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
             characterController.Move(transform.rotation * moveInput * moveSpeed * Time.deltaTime);
             animator.SetFloat("moveAmount", moveAmount, 0.1f, Time.deltaTime);
 
-            if (Input.GetKey(KeyCode.F) && stealthTarget.GetComponent<CombatantAI>().currentState == CombatantAI.State.Patrol && animator.GetBool("IsCrouched"))
+            if (Input.GetKey(KeyCode.F) && stealthTarget != null && stealthTarget.GetComponent<CombatantAI>().currentState == CombatantAI.State.Patrol && animator.GetBool("IsCrouched"))
             {
                 StealthAttack();
             }
